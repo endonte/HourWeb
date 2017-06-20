@@ -18,6 +18,10 @@ def internal_server_error(e):
 def index():
     return render_template('index.html')
 
+@app.route('/')
+def products():
+    return render_template('products.html')
+
 @app.route('/pricing')
 def pricing():
     return render_template('pricing.html')
