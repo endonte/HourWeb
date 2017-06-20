@@ -22,9 +22,17 @@ def index():
 def pricing():
     return render_template('pricing.html')
 
+@app.route('/support')
+def support():
+    return render_template('support.html')
+
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
+@app.route('hourweb')
+def hourweb():
+    return render_template('hourweb.html')
 
 if __name__ == '__main__':
     manager.run()
