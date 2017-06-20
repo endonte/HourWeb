@@ -18,7 +18,7 @@ def internal_server_error(e):
 def index():
     return render_template('index.html')
 
-@app.route('/')
+@app.route('/products')
 def products():
     return render_template('products.html')
 
