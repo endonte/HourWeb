@@ -30,7 +30,7 @@ def support():
 def contact():
     return render_template('contact.html')
 
-@app.route('hourweb')
+@app.route('/hourweb')
 def hourweb():
     return render_template('hourweb.html')
 
