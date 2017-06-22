@@ -1,10 +1,25 @@
 from flask import Flask, render_template
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import Required
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'hard to guess string'
 manager = Manager(app)
 bootstrap = Bootstrap(app)
+
+class Quote_Form(FlaskForm):
+    customer = StringField('Customer Name:', validators=[Required()])
+    company = StringField('Company Name:')
+    regno = StringField('Business Registration No.:')
+    ship_address1 = StringField('Delivery Address Line 1')
+    ship_address2 = StringField('Delivery Address Line 2')
+    bill_address1 = StringField('Billing Address Line 1')
+    bill_address2 = StringField('Billing Address Line 2')
+    
+    create = SubmitField('Create Quote')
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -34,9 +49,10 @@ def support():
 def contact():
     return render_template('contact.html')
 
-@app.route('/hourweb')
+@app.route('/hourweb', methods=['GET', 'POST'])
 def hourweb():
-    return render_template('hourweb.html')
+    form = Quote_Form()
+    return render_template('hourweb.html', form=form)
 
 if __name__ == '__main__':
     manager.run()
