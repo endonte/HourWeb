@@ -3,24 +3,47 @@ from flask_script import Manager
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from wtforms.validators import Required
+from wtforms.validators import Required, Length
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+    'postgresql://donald:@localhost/hourdb'
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 manager = Manager(app)
 bootstrap = Bootstrap(app)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+class Quote_Details(db.Model):
+    __tablename__ = 'quote'
+    id = db.Column(db.Integer, primary_key = True)
+    customer = db.Column(db.String(64))
+    company = db.Column(db.String(64), nullable = True)
+    regno = db.Column(db.String(64), nullable = True)
+    ship_address1 = db.Column(db.String(40))
+    ship_address2 = db.Column(db.String(40))
+    ship_postal = db.Column(db.String(6))
+    bill_address1 = db.Column(db.String(64), nullable = True)
+    bill_address2 = db.Column(db.String(64), nullable = True)
+    bill_postal = db.Column(db.String(6), nullable = True)
 
 class Quote_Form(FlaskForm):
     customer = StringField('Customer Name:', validators=[Required()])
     company = StringField('Company Name:')
     regno = StringField('Business Registration No.:')
-    ship_address1 = StringField('Delivery Address Line 1')
-    ship_address2 = StringField('Delivery Address Line 2')
-	ship_postal = StringField('Delivery Postal Code')
+    ship_address1 = StringField('Delivery Address Line 1', validators=[Required()])
+    ship_address2 = StringField('Delivery Address Line 2', validators=[Required()])
+    ship_postal = StringField('Delivery Postal Code', validators=[Length(6, 6, 'Please enter 6 digits only')])
     bill_address1 = StringField('Billing Address Line 1')
     bill_address2 = StringField('Billing Address Line 2')
-	bill_postal = StringField('Billing Postal Code')
-    
+    bill_postal = StringField('Billing Postal Code')
+
     create = SubmitField('Create Quote')
 
 @app.errorhandler(404)
@@ -54,6 +77,18 @@ def contact():
 @app.route('/hourweb', methods=['GET', 'POST'])
 def hourweb():
     form = Quote_Form()
+    Quotation = Quote_Details(
+        customer = form.customer.data,
+        company = form.company.data,
+        regno = form.regno.data,
+        ship_address1 = form.ship_address1.data,
+        ship_address2 = form.ship_address2.data,
+        ship_postal = form.ship_postal.data,
+        bill_address1 = form.bill_address1.data,
+        bill_address2 = form.bill_address2.data,
+        bill_postal = form.bill_postal.data
+    )
+    db.session.add(Quotation)
     return render_template('hourweb.html', form=form)
 
 if __name__ == '__main__':
