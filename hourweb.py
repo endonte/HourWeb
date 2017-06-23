@@ -16,8 +16,10 @@ class Quote_Form(FlaskForm):
     regno = StringField('Business Registration No.:')
     ship_address1 = StringField('Delivery Address Line 1')
     ship_address2 = StringField('Delivery Address Line 2')
+	ship_postal = StringField('Delivery Postal Code')
     bill_address1 = StringField('Billing Address Line 1')
     bill_address2 = StringField('Billing Address Line 2')
+	bill_postal = StringField('Billing Postal Code')
     
     create = SubmitField('Create Quote')
 
