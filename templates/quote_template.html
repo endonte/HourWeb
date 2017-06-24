@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>UNI-TAT ICE & MARKETING PTE LTD</h1>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <div class="demo-content">
+			<p>
+				Customer Name: {{ Quotation.customer }} <br />
+				Company Name: {{ Quotation.company }} <br />
+				Company Registration Number: {{ Quotation.regno }}
+			</p>
+		</div>
+    </div>
+    <div class="col-xs-6">
+        <div class="demo-content bg-alt">
+			<p>
+			</p>
+		</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <div class="demo-content">
+			<p>
+				Shipping Address: <br />
+				{{ Quotation.ship_address1 }} <br />
+				{{ Quotation.ship_address2 }} <br />
+				S({{ Quotation.ship_postal }})
+			<p />
+		</div>
+    </div>
+    <div class="col-xs-6">
+        <div class="demo-content bg-alt">
+			<p>
+				Billing Address: <br />
+				{{ Quotation.bill_address1 }} <br />
+				{{ Quotation.bill_address2 }} <br />
+				S({{ Quotation.bill_postal }})
+				</p>
+		</div>
+    </div>
+</div>
+<hr />
+{% endblock %}

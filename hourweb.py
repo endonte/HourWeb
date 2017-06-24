@@ -90,6 +90,7 @@ def hourweb():
 			bill_postal = form.bill_postal.data
 		)
 		db.session.add(Quotation)
+		return render_template('quote_template.html', form=form, Quotation=Quotation)
     
 	return render_template('hourweb.html', form=form)
 
