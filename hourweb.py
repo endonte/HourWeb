@@ -11,7 +11,7 @@ from flask_migrate import Migrate, MigrateCommand
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
 app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'postgresql://donald:Iceman123+@localhost/hourdb'
+    'postgresql://donald:@localhost/hourdb'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -38,7 +38,7 @@ class Quote_Form(FlaskForm):
     company = StringField('Company Name:')
     regno = StringField('Business Registration No.:')
     ship_address1 = StringField('Delivery Address Line 1', validators=[Required()])
-    ship_address2 = StringField('Delivery Address Line 2', validators=[Required()])
+    ship_address2 = StringField('Delivery Address Line 2')
     ship_postal = StringField('Delivery Postal Code', validators=[Length(6, 6, 'Please enter 6 digits only')])
     bill_address1 = StringField('Billing Address Line 1')
     bill_address2 = StringField('Billing Address Line 2')
@@ -76,23 +76,23 @@ def contact():
 
 @app.route('/hourweb', methods=['GET', 'POST'])
 def hourweb():
-	form = Quote_Form()
-	if form.validate_on_submit():
-		Quotation = Quote_Details(
-			customer = form.customer.data,
-			company = form.company.data,
-			regno = form.regno.data,
-			ship_address1 = form.ship_address1.data,
-			ship_address2 = form.ship_address2.data,
-			ship_postal = form.ship_postal.data,
-			bill_address1 = form.bill_address1.data,
-			bill_address2 = form.bill_address2.data,
-			bill_postal = form.bill_postal.data
-		)
-		db.session.add(Quotation)
-		return render_template('quote_template.html', form=form, Quotation=Quotation)
-    
-	return render_template('hourweb.html', form=form)
+    form = Quote_Form()
+    if form.validate_on_submit():
+        Quotation = Quote_Details(
+            customer = form.customer.data,
+            company = form.company.data,
+            regno = form.regno.data,
+            ship_address1 = form.ship_address1.data,
+            ship_address2 = form.ship_address2.data,
+            ship_postal = form.ship_postal.data,
+            bill_address1 = form.bill_address1.data,
+            bill_address2 = form.bill_address2.data,
+            bill_postal = form.bill_postal.data
+        )
+        db.session.add(Quotation)
+        return render_template('quote_template.html', form=form, Quotation=Quotation)
+
+    return render_template('hourweb.html', form=form)
 
 if __name__ == '__main__':
     manager.run()
